@@ -365,6 +365,31 @@
             resize: vertical;
         }
 
+        /* Store Button Section */
+        .store-section {
+            text-align: center;
+            padding: 60px 0;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: white;
+        }
+
+        .store-btn {
+            background-color: white;
+            color: var(--secondary-color);
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            margin-top: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .store-btn:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+        }
+
         /* Footer */
         footer {
             background-color: var(--primary-color);
@@ -437,6 +462,10 @@
             .section-title {
                 font-size: 2rem;
             }
+
+            .skills-container, .projects-container {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 576px) {
@@ -469,6 +498,7 @@
                 <li><a href="#skills">Habilidades</a></li>
                 <li><a href="#projects">Proyectos</a></li>
                 <li><a href="#contact">Contacto</a></li>
+                <li><a href="store.html">Tienda</a></li>
             </ul>
         </div>
     </header>
@@ -481,6 +511,7 @@
             <div class="hero-btns">
                 <a href="#projects" class="btn btn-primary">Ver Proyectos</a>
                 <a href="#contact" class="btn btn-secondary">Contactarme</a>
+                <a href="store.html" class="btn btn-secondary">Visitar Tienda</a>
             </div>
         </div>
     </section>
@@ -498,7 +529,7 @@
                     <a href="#" class="btn">Descargar CV</a>
                 </div>
                 <div class="about-img">
-                    <img src="https://images.unsplas.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Foto de perfil">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Foto de perfil">
                 </div>
             </div>
         </div>
@@ -640,6 +671,15 @@
                     </form>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Store Button Section -->
+    <section class="store-section">
+        <div class="container">
+            <h2>¿Te interesan mis productos?</h2>
+            <p>Visita mi tienda en línea para ver todos los productos y servicios que ofrezco</p>
+            <a href="store.html" class="btn store-btn">Ir a la Tienda</a>
         </div>
     </section>
 
