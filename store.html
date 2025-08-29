@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mostrario de Productos con IA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #24292e;
+            --secondary-color: #0366d6;
+            --accent-color: #28a745;
+            --light-color: #f6f8fa;
+            --dark-color: #1a1e22;
+            --text-color: #24292e;
+            --text-light: #586069;
+            --transition: all 0.3s ease;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --border-radius: 6px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-color);
+            scroll-behavior: smooth;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--secondary-color);
+            transition: var(--transition);
+        }
+
+        a:hover {
+            color: var(--accent-color);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow);
+        }
+
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-color);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 160px 0 100px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #c9d1d9;
+        }
+
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        /* Products Section */
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .product-img {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-img img {
+            transform: scale(1.1);
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .product-description {
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        .product-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .tech-tag {
+            background-color: var(--light-color);
+            color: var(--text-light);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        /* Chat Section */
+        .chat-section {
+            background-color: var(--light-color);
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .chat-messages {
+            padding: 20px;
+            height: 300px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.4;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: var(--secondary-color);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #e1e4e8;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-family: inherit;
+        }
+
+        .chat-input button {
+            margin-left: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-5px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-top: 20px;
+            }
+            
+            .nav-links li {
+                margin: 0 15px;
+            }
+            
+            .hero {
+                padding: 180px 0 80px;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-links li {
+                margin: 10px 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .products-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+        }
+
+        /* Loading animation */
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--light-color);
+            padding: 12px 16px;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--text-light);
+            border-radius: 50%;
+            margin: 0 3px;
+            animation: typing-animation 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing-animation {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">Tech<span>Shop</span></a>
+            <ul class="nav-links">
+                <li><a href="#products">Productos</a></li>
+                <li><a href="#about">Nosotros</a></li>
+                <li><a href="#chat">Consultas</a></li>
+                <li><a href="#contact">Contacto</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>Descubre Nuestros <span style="color: var(--accent-color);">Productos</span></h1>
+            <p>La mejor tecnología al alcance de tu mano con asistente virtual inteligente</p>
+            <div class="hero-btns">
+                <a href="#products" class="btn btn-primary">Ver Catálogo</a>
+                <a href="#chat" class="btn btn-secondary">Consultar Ahora</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="section">
+        <div class="container">
+            <h2 class="section-title">Nuestros Productos</h2>
+            <div class="products-container">
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Laptop Gaming">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Laptop Gaming Pro</h3>
+                        <div class="product-price">$1,299.99</div>
+                        <p class="product-description">Laptop de alto rendimiento para gaming y trabajo con pantalla de 144Hz y RTX 3060.</p>
+                        <div class="product-tech">
+                            <span class="tech-tag">Intel i7</span>
+                            <span class="tech-tag">16GB RAM</span>
+                            <span class="tech-tag">1TB SSD</span>
+                        </div>
+                        <a href="#" class="btn">Más Información</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Smartphone">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Smartphone Ultra</h3>
+                        <div class="product-price">$899.99</div>
+                        <p class="product-description">Teléfono inteligente con cámara de 108MP, batería de 5000mAh y 5G.</p>
+                        <div class="product-tech">
+                            <span class="tech-tag">128GB</span>
+                            <span class="tech-tag">5G</span>
+                            <span class="tech-tag">AMOLED</span>
+                        </div>
+                        <a href="#" class="btn">Más Información</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80" alt="Smartwatch">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Smartwatch Series 7</h3>
+                        <div class="product-price">$349.99</div>
+                        <p class="product-description">Reloj inteligente con monitor de salud, GPS y resistencia al agua.</p>
+                        <div class="product-tech">
+                            <span class="tech-tag">iOS/Android</span>
+                            <span class="tech-tag">GPS</span>
+                            <span class="tech-tag">Heart Rate</span>
+                        </div>
+                        <a href="#" class="btn">Más Información</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Auriculares">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Auriculares Premium</h3>
+                        <div class="product-price">$249.99</div>
+                        <p class="product-description">Auriculares con cancelación de ruido y sonido de alta fidelidad.</p>
+                        <div class="product-tech">
+                            <span class="tech-tag">Wireless</span>
+                            <span class="tech-tag">Noise Cancel</span>
+                            <span class="tech-tag">30h battery</span>
+                        </div>
+                        <a href="#" class="btn">Más Información</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Monitor 4K">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Monitor 4K Ultra HD</h3>
+                        <div class="product-price">$599.99</div>
+                        <p class="product-description">Monitor de 32 pulgadas con resolución 4K y frecuencia de 144Hz.</p>
+                        <div class="product-tech">
+                            <span class="tech-tag">32"</span>
+                            <span class="tech-tag">4K</span>
+                            <span class="tech-tag">144Hz</span>
+                        </div>
+                        <a href="#" class="btn">Más Información</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1533586473301-7f93a072c7c9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Teclado Mecánico">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Teclado Mecánico RGB</h3>
+                        <div class="product-price">$129.99</div>
+                        <p class="product-description">Teclado mecánico con switches Blue y retroiluminación RGB personalizable.</p>
+                        <div class="product-tech">
+                            <span class="tech-tag">Mechanical</span>
+                            <span class="tech-tag">RGB</span>
+                            <span class="tech-tag">Anti-Ghosting</span>
+                        </div>
+                        <a href="#" class="btn">Más Información</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section" style="background-color: var(--light-color);">
+        <div class="container">
+            <h2 class="section-title">Sobre Nosotros</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Tu tienda de tecnología de confianza</h3>
+                    <p>En TechShop nos dedicamos a ofrecerte los mejores productos tecnológicos con garantía y soporte especializado. Contamos con más de 10 años en el mercado y miles de clientes satisfechos.</p>
+                    <p>Nuestro equipo de expertos está siempre disponible para ayudarte a encontrar el producto que mejor se adapte a tus necesidades.</p>
+                    <p>Todos nuestros productos incluyen garantía del fabricante y soporte técnico especializado. Ofrecemos envíos a todo el país y múltiples formas de pago.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chat Section -->
+    <section id="chat" class="section chat-section">
+        <div class="container">
+            <h2 class="section-title">Asistente Virtual</h2>
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h3>Consulta sobre nuestros productos</h3>
+                    <p>Nuestro asistente IA está aquí para ayudarte</p>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message bot-message">
+                        ¡Hola! Soy tu asistente virtual de TechShop. ¿En qué puedo ayudarte hoy? Puedo responder preguntas sobre nuestros productos, precios, características y más.
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="user-input" placeholder="Escribe tu pregunta aquí...">
+                    <button class="btn" id="send-btn">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">Contacto</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>¡Estamos aquí para ayudarte!</h3>
+                    <p>Si prefieres contactarnos directamente, aquí nos encuentras:</p>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <p>Av. Tecnología 123, Ciudad Digital</p>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <p>+1 (234) 567-890</p>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <p>info@techshop.example</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="logo">Tech<span>Shop</span></div>
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            </div>
+            <p>&copy; 2023 TechShop. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            
+            // Productos disponibles para consultas
+            const products = [
+                {
+                    name: "Laptop Gaming Pro",
+                    price: 1299.99,
+                    description: "Laptop de alto rendimiento para gaming y trabajo con pantalla de 144Hz y RTX 3060.",
+                    features: ["Intel i7", "16GB RAM", "1TB SSD", "RTX 3060", "Windows 11"]
+                },
+                {
+                    name: "Smartphone Ultra",
+                    price: 899.99,
+                    description: "Teléfono inteligente con cámara de 108MP, batería de 5000mAh y 5G.",
+                    features: ["6.7\" AMOLED", "128GB", "5G", "108MP Cámara"]
+                },
+                {
+                    name: "Smartwatch Series 7",
+                    price: 349.99,
+                    description: "Reloj inteligente con monitor de salud, GPS y resistencia al agua.",
+                    features: ["iOS/Android", "GPS", "Monitor cardiaco", "Resistente al agua"]
+                },
+                {
+                    name: "Auriculares Premium",
+                    price: 249.99,
+                    description: "Auriculares con cancelación de ruido y sonido de alta fidelidad.",
+                    features: ["Cancelación de ruido", "30h batería", "Bluetooth 5.0", "Plegables"]
+                },
+                {
+                    name: "Monitor 4K Ultra HD",
+                    price: 599.99,
+                    description: "Monitor de 32 pulgadas con resolución 4K y frecuencia de 144Hz.",
+                    features: ["32\"", "4K UHD", "144Hz", "HDR10"]
+                },
+                {
+                    name: "Teclado Mecánico RGB",
+                    price: 129.99,
+                    description: "Teclado mecánico con switches Blue y retroiluminación RGB personalizable.",
+                    features: ["Switches Blue", "RGB", "Anti-Ghosting", "USB-C"]
+                }
+            ];
+
+            // Función para simular una API de IA
+            function simulateAIResponse(userMessage) {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        // Respuestas predefinidas basadas en palabras clave
+                        const lowerCaseMessage = userMessage.toLowerCase();
+                        
+                        if (lowerCaseMessage.includes('hola') || lowerCaseMessage.includes('holi') || lowerCaseMessage.includes('buenas')) {
+                            resolve("¡Hola! ¿En qué puedo ayudarte hoy? Puedo proporcionarte información sobre nuestros productos, precios y características.");
+                        } else if (lowerCaseMessage.includes('precio') || lowerCaseMessage.includes('cuánto') || lowerCaseMessage.includes('cuesta')) {
+                            const productMatch = products.find(product => 
+                                lowerCaseMessage.includes(product.name.toLowerCase().split(' ')[0])
+                            );
+                            
+                            if (productMatch) {
+                                resolve(`El ${productMatch.name} tiene un precio de $${productMatch.price}. ¿Te gustaría saber más sobre este producto?`);
+                            } else {
+                                resolve("Tenemos varios productos en diferentes rangos de precios. ¿Hay algún producto específico sobre el que te gustaría conocer el precio?");
+                            }
+                        } else if (lowerCaseMessage.includes('característica') || lowerCaseMessage.includes('especificación') || lowerCaseMessage.includes('funciona')) {
+                            const productMatch = products.find(product => 
+                                lowerCaseMessage.includes(product.name.toLowerCase().split(' ')[0])
+                            );
+                            
+                            if (productMatch) {
+                                resolve(`El ${productMatch.name} tiene las siguientes características: ${productMatch.features.join(', ')}. ¿Necesitas más detalles?`);
+                            } else {
+                                resolve("Cada producto tiene características específicas. ¿Sobre qué producto te gustaría conocer sus características?");
+                            }
+                        } else if (lowerCaseMessage.includes('producto') || lowerCaseMessage.includes('modelo') || lowerCaseMessage.includes('item')) {
+                            resolve("Tenemos los siguientes productos disponibles: " + 
+                                products.map(p => p.name).join(', ') + 
+                                ". ¿Te interesa alguno en particular?");
+                        } else if (lowerCaseMessage.includes('garantía') || lowerCaseMessage.includes('devolución') || lowerCaseMessage.includes(' cambio')) {
+                            resolve("Todos nuestros productos incluyen garantía del fabricante de 12 meses. Aceptamos devoluciones dentro de los primeros 30 días si el producto presenta fallas de fábrica.");
+                        } else if (lowerCaseMessage.includes('envío') || lowerCaseMessage.includes('entrega') || lowerCaseMessage.includes('domicilio')) {
+                            resolve("Realizamos envíos a todo el país. El tiempo de entrega es de 3-5 días hábiles. Los envíos son gratuitos para compras superiores a $500.");
+                        } else if (lowerCaseMessage.includes('pago') || lowerCaseMessage.includes('tarjeta') || lowerCaseMessage.includes('efectivo')) {
+                            resolve("Aceptamos múltiples métodos de pago: tarjetas de crédito/débito, transferencias bancarias, PayPal y efectivo en puntos de pago autorizados.");
+                        } else if (lowerCaseMessage.includes('gracias') || lowerCaseMessage.includes('agrade')) {
+                            resolve("¡De nada! Estoy aquí para ayudarte. ¿Hay algo más en lo que pueda asistirte?");
+                        } else {
+                            // Si no reconoce la consulta, buscar coincidencias parciales con productos
+                            const matchedProduct = products.find(product => 
+                                product.name.toLowerCase().split(' ').some(word => 
+                                    lowerCaseMessage.includes(word)
+                                )
+                            );
+                            
+                            if (matchedProduct) {
+                                resolve(`El ${matchedProduct.name} es ${matchedProduct.description.toLowerCase()} con un precio de $${matchedProduct.price}. ¿Te gustaría saber más?`);
+                            } else {
+                                resolve("No estoy seguro de entender tu pregunta. ¿Podrías reformularla? Puedo ayudarte con información sobre productos, precios, características, garantía, envíos y métodos de pago.");
+                            }
+                        }
+                    }, 1000 + Math.random() * 1000); // Simular tiempo de respuesta variable
+                });
+            }
+
+            // Función para agregar mensaje al chat
+            function addMessage(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+                messageDiv.textContent = message;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Función para mostrar indicador de escritura
+            function showTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.classList.add('message', 'bot-message', 'typing-indicator');
+                typingDiv.id = 'typing-indicator';
+                
+                for (let i = 0; i < 3; i++) {
+                    const dot = document.createElement('div');
+                    dot.classList.add('typing-dot');
+                    typingDiv.appendChild(dot);
+                }
+                
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                return typingDiv;
+            }
+
+            // Función para enviar mensaje
+            async function sendMessage() {
+                const message = userInput.value.trim();
+                if (!message) return;
+                
+                // Agregar mensaje del usuario
+                addMessage(message, true);
+                userInput.value = '';
+                
+                // Mostrar indicador de escritura
+                const typingIndicator = showTypingIndicator();
+                
+                try {
+                    // Obtener respuesta de la IA simulada
+                    const response = await simulateAIResponse(message);
+                    
+                    // Eliminar indicador de escritura
+                    chatMessages.removeChild(typingIndicator);
+                    
+                    // Agregar respuesta del bot
+                    addMessage(response);
+                } catch (error) {
+                    // Eliminar indicador de escritura
+                    chatMessages.removeChild(typingIndicator);
+                    
+                    // Mensaje de error
+                    addMessage("Lo siento, ha ocurrido un error. Por favor, intenta nuevamente.");
+                }
+            }
+
+            // Event listeners
+            sendBtn.addEventListener('click', sendMessage);
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
