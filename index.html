@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Power Control X | Home</title>
+    <title>Mi Presentación | Power Control X</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Variables de colores y estilos */
@@ -365,31 +365,6 @@
             resize: vertical;
         }
 
-        /* Store Button Section */
-        .store-section {
-            text-align: center;
-            padding: 60px 0;
-            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
-            color: white;
-        }
-
-        .store-btn {
-            background-color: white;
-            color: var(--secondary-color);
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            margin-top: 20px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .store-btn:hover {
-            background-color: var(--accent-color);
-            color: white;
-            transform: translateY(-5px);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
-        }
-
         /* Footer */
         footer {
             background-color: var(--primary-color);
@@ -422,6 +397,24 @@
             transform: translateY(-5px);
         }
 
+        /* Hamburguesa menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            height: 3px;
+            width: 100%;
+            background-color: white;
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+
         /* Responsive Design */
         @media (max-width: 992px) {
             .about-content, .contact-container {
@@ -439,15 +432,37 @@
 
         @media (max-width: 768px) {
             .nav-container {
-                flex-direction: column;
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 15px;
+            }
+            
+            .hamburger {
+                display: flex;
+                z-index: 1001;
             }
             
             .nav-links {
-                margin-top: 20px;
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background-color: var(--primary-color);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin: 0;
+                transition: var(--transition);
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            }
+            
+            .nav-links.active {
+                right: 0;
             }
             
             .nav-links li {
-                margin: 0 15px;
+                margin: 20px 0;
             }
             
             .hero {
@@ -462,20 +477,11 @@
             .section-title {
                 font-size: 2rem;
             }
-
-            .skills-container, .projects-container {
-                grid-template-columns: 1fr;
-            }
         }
 
         @media (max-width: 576px) {
             .nav-links {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .nav-links li {
-                margin: 10px 0;
+                width: 100%;
             }
             
             .hero h1 {
@@ -493,12 +499,18 @@
     <header>
         <div class="container nav-container">
             <a href="#" class="logo">Power Control <span>X</span></a>
-            <ul class="nav-links">
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="#about">Sobre Mí</a></li>
                 <li><a href="#skills">Habilidades</a></li>
                 <li><a href="#projects">Proyectos</a></li>
-                <li><a href="#contact">Contacto</a></li>
                 <li><a href="store.html">Tienda</a></li>
+                <li><a href="https://files.powercontrolx.com">Intranet</a></li>
+                <li><a href="#contact">Contacto</a></li>
             </ul>
         </div>
     </header>
@@ -511,7 +523,6 @@
             <div class="hero-btns">
                 <a href="#projects" class="btn btn-primary">Ver Proyectos</a>
                 <a href="#contact" class="btn btn-secondary">Contactarme</a>
-                <a href="store.html" class="btn btn-secondary">Visitar Tienda</a>
             </div>
         </div>
     </section>
@@ -529,7 +540,7 @@
                     <a href="#" class="btn">Descargar CV</a>
                 </div>
                 <div class="about-img">
-                    <img src="https://images.unsplh.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Foto de perfil">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Foto de perfil">
                 </div>
             </div>
         </div>
@@ -652,9 +663,15 @@
                         </div>
                         <p>+1 (234) 567-890</p>
                     </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <p>+1 (234) 567-890</p>
+                    </div>
                 </div>
                 <div class="contact-form">
-                    <form>
+                    <form id="contactForm">
                         <div class="form-group">
                             <label for="name">Nombre</label>
                             <input type="text" id="name" placeholder="Tu nombre" required>
@@ -674,19 +691,10 @@
         </div>
     </section>
 
-    <!-- Store Button Section -->
-    <section class="store-section">
-        <div class="container">
-            <h2>¿Te interesan mis productos?</h2>
-            <p>Visita mi tienda en línea para ver todos los productos y servicios que ofrezco</p>
-            <a href="store.html" class="btn store-btn">Ir a la Tienda</a>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="logo">Git<span>Hub</span></div>
+            <div class="logo">Power Control <span>X</span></div>
             <div class="social-links">
                 <a href="#" class="social-link"><i class="fab fa-github"></i></a>
                 <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
@@ -696,5 +704,54 @@
             <p>&copy; 2023 Tu Nombre. Todos los derechos reservados.</p>
         </div>
     </footer>
+
+    <script>
+        // JavaScript para el menú hamburguesa
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+        
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+        
+        // JavaScript para el formulario de contacto
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Aquí puedes agregar el código para enviar el formulario
+            // Por ejemplo, usando Fetch API o enviando a un servicio como Formspree
+            
+            // Ejemplo básico con Formspree (necesitas reemplazar con tu email)
+            const formData = new FormData(this);
+            
+            fetch('https://formspree.io/f/your-form-id', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('¡Mensaje enviado con éxito!');
+                    this.reset();
+                } else {
+                    throw new Error('Error al enviar el mensaje');
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error.message);
+            });
+        });
+    </script>
 </body>
 </html>
